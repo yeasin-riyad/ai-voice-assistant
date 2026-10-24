@@ -1,6 +1,9 @@
 import { genToken } from "../Configs/token.js";
 import User from "../Models/user.model.js";
 
+   const isProduction = process.env.NODE_ENV === "production";
+
+
 export const googleAuth = async (req, res) => {
   try {
     const { name, email } = req.body;
@@ -27,7 +30,6 @@ export const googleAuth = async (req, res) => {
     // Generate JWT
     const token = genToken(user._id);
 
-    const isProduction = process.env.NODE_ENV === "production";
 
     // googleAuth ফাংশনে res.cookie এর অংশটি এভাবে পরিবর্তন করুন:
     res.cookie("token", token, {
