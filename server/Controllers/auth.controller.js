@@ -1,4 +1,3 @@
-
 import { genToken } from "../Configs/token.js";
 import User from "../Models/user.model.js";
 
@@ -28,11 +27,13 @@ export const googleAuth = async (req, res) => {
     // Generate JWT
     const token = genToken(user._id);
 
-    // Store token in an HTTP-only cookie
+    const isProduction = process.env.NODE_ENV === "production";
+
+    // googleAuth ফাংশনে res.cookie এর অংশটি এভাবে পরিবর্তন করুন:
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -64,8 +65,8 @@ export const logOut = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       path: "/",
     });
 

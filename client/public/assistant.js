@@ -19,7 +19,7 @@
 
   // Your Express backend URL
   // Change this to your production URL (e.g., https://api.lumora.ai) later
-  const apiUrl = "http://localhost:8000"; 
+  const apiUrl = "https://server-taupe-two-65.vercel.app"; 
 
   async function initialize() {
     try {
