@@ -24,7 +24,7 @@ const publicCors=cors({
 // ২. Middlewares সেটআপ
 
 app.use(express.json());
-app.use(cookieParser()); // ⚠️ ব্র্যাকেট () দিতে ভুলবেন না
+app.use(cookieParser()); 
 
 // ৩. Routes সেটআপ
 app.get("/", (req, res) => {
@@ -35,37 +35,26 @@ app.use("/api/auth",privateCors, authRoutes);
 app.use("/api/user",privateCors, userRoutes);
 app.use("/api/assistant",publicCors,assistanRoutes);
 
-
-
-const PORT = process.env.PORT || 8000;
-
-// ৪. সার্ভার এবং ডাটাবেস চালু করার ফাংশন (try-catch সহ)
+// ডাটাবেস কানেকশন ফাংশন
 const startServer = async () => {
     try {
-        // প্রথমে ডাটাবেস কানেক্ট করুন
         await connectDb();
         console.log("✅ Database Connected Successfully");
-
-        // তারপর সার্ভার চালু করুন
-        const server = app.listen(PORT, () => {
-            console.log(`🚀 Server Started On http://localhost:${PORT}`);
-        });
-
-        // যদি পোর্ট আগে থেকেই ব্যবহৃত হয়, তবে সেই এরর ধরার জন্য
-        server.on('error', (error) => {
-            if (error.code === 'EADDRINUSE') {
-                console.error(`❌ Error: Port ${PORT} is already in use by another application.`);
-                console.error(`👉 Please change the PORT in your .env file or close the other application.`);
-            } else {
-                console.error("❌ Server Error:", error);
-            }
-        });
-
     } catch (error) {
-        console.error("❌ Failed to start the server:", error.message);
+        console.error("❌ Failed to connect to the database:", error.message);
         process.exit(1); 
     }
 };
 
-// সার্ভার শুরু করুন
 startServer();
+
+// Vercel-এর জন্য app এক্সপোর্ট করুন
+export default app;
+
+// লোকাল ডেভেলপমেন্টের জন্য (শুধু তখনই চালু হবে যখন সরাসরি node index.js চালানো হবে)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Server Started On http://localhost:${PORT}`);
+    });
+}
