@@ -7,7 +7,7 @@ export default function LumoraWidget() {
 
     const script = document.createElement('script');
     script.id = 'lumora-ai-widget';
-    script.src = 'http://localhost:5173/assistant.js';
+    script.src = 'https://client-dbf3.vercel.app/assistant.js';
     script.setAttribute('data-user-id', '6ada3bda6a02631fd8c3d218');
     script.async = true;
     

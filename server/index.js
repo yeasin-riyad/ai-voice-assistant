@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 
 const privateCors= cors({
-    origin: "http://localhost:5173",
+    origin: "https://client-dbf3.vercel.app",
     credentials: true
 })
 
